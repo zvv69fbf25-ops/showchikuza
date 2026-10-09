@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#211526">
+<title>運命の座席発券｜松竹座風ゲーム</title>
+<style>
+:root{--bg:#17111d;--panel:#281d30;--panel2:#34253d;--pink:#f1bad6;--cream:#fff5e9;--ink:#572844;--muted:#cbb9cf;--gold:#f2d18b}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(ellipse at top,#3a2440 0,#17111d 58%);color:#fff7fb;font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;min-height:100vh}
+.wrap{width:min(100% - 28px,520px);margin:0 auto;padding:24px 0 40px}
+header{text-align:center;padding:14px 6px 20px}.eyebrow{font-size:.72rem;letter-spacing:.17em;color:var(--pink);font-weight:700}.brand{font-size:clamp(1.8rem,8vw,2.65rem);line-height:1.18;margin:10px 0 8px;letter-spacing:.02em}.subtitle{color:#d9c9dd;font-size:.9rem}
+.marquee{height:7px;border-radius:99px;background:linear-gradient(90deg,transparent,var(--gold),var(--pink),var(--gold),transparent);margin:0 auto 20px;max-width:230px}
+.card{background:linear-gradient(145deg,rgba(55,39,65,.97),rgba(35,25,43,.98));border:1px solid #59425e;border-radius:22px;padding:22px;box-shadow:0 16px 40px #09060d66}
+.theater{border-radius:15px;background:linear-gradient(150deg,#5d263d,#321c34 58%,#1d1828);padding:22px 12px;text-align:center;position:relative;overflow:hidden;border:1px solid #9c657d}
+.theater:before,.theater:after{content:"";position:absolute;top:0;bottom:0;width:18px;background:repeating-linear-gradient(180deg,#9a425e 0 8px,#6c2b46 8px 16px);opacity:.8}.theater:before{left:0}.theater:after{right:0}
+.theater .kanji{font-family:serif;font-size:2rem;letter-spacing:.22em;color:#ffe7bd;text-shadow:0 2px 12px #f7b5cc66}.theater small{display:block;color:#f2c9dc;letter-spacing:.14em;margin-top:8px}
+.notice{font-size:.78rem;color:#d3c1d8;line-height:1.65;margin:15px 0 0}
+label{display:block;font-size:.85rem;color:#f0dbe9;margin:18px 0 8px}
+select,input{width:100%;padding:13px 12px;border:1px solid #725777;border-radius:12px;background:#211728;color:#fff;font:inherit}
+button{font:inherit;font-weight:750;cursor:pointer;border:0;border-radius:14px;padding:15px 16px;min-height:50px;transition:transform .12s,filter .12s}
+button:active{transform:scale(.98)}button:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.primary{width:100%;background:linear-gradient(100deg,#f6c6df,#f3dca6);color:#3a2138;box-shadow:0 6px 20px #f1bad622;margin-top:18px}
+.secondary{background:#443149;border:1px solid #775d7d;color:#fff;width:100%}.actions{display:grid;gap:10px;margin-top:14px}
+.center{text-align:center}.hidden{display:none!important}.status{color:var(--pink);font-weight:750;font-size:.85rem;letter-spacing:.08em}.loading-title{font-size:1.45rem;margin:13px 0}.spinner{width:70px;height:70px;border:4px solid #634c68;border-top-color:var(--pink);border-right-color:var(--gold);border-radius:50%;margin:8px auto 18px;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes pulse{50%{opacity:.45;transform:scale(.99)}}.processing{animation:pulse 1.3s ease-in-out infinite}
+.progress{height:7px;background:#4a3650;border-radius:99px;overflow:hidden;margin:22px 0 10px}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--gold));transition:width .5s}
+.ticket{background:var(--cream);color:var(--ink);border-radius:16px;padding:20px 17px;position:relative;overflow:hidden}
+.ticket:before,.ticket:after{content:"";position:absolute;top:54%;width:22px;height:22px;border-radius:50%;background:#2b1d32}.ticket:before{left:-12px}.ticket:after{right:-12px}
+.ticket-top{text-align:center;font-size:.72rem;letter-spacing:.14em;color:#9b657d}.ticket-title{text-align:center;font-family:serif;font-size:1.3rem;margin:7px 0 14px}
+.ticket-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.ticket-cell{background:#f4e5e4;border-radius:10px;padding:11px 8px;text-align:center}.ticket-cell span{display:block;font-size:.72rem;color:#956c80}.ticket-cell strong{display:block;font-size:1.2rem;margin-top:3px}.seat-big{text-align:center;padding:15px 0 8px}.seat-big .floor{font-size:1rem}.seat-big .row{font-size:2rem;font-weight:850;letter-spacing:.04em;margin-top:3px}.ticket-note{text-align:center;font-size:.85rem;line-height:1.65;padding:12px 4px 0}
+.badge{display:inline-block;background:#f3d69b;color:#5d3b42;border-radius:99px;padding:6px 11px;font-size:.76rem;font-weight:800}
+.history{margin-top:18px}.history h3{font-size:.95rem}.history-item{display:flex;justify-content:space-between;gap:8px;border-top:1px solid #59445e;padding:11px 0;color:#eee0ef;font-size:.83rem}.foot{text-align:center;color:#a994af;font-size:.72rem;line-height:1.7;margin:18px 6px 0}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#fff4e7;color:#46283e;padding:12px 18px;border-radius:99px;font-size:.85rem;box-shadow:0 6px 24px #0007;z-index:9;max-width:90%;text-align:center}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">FICTIONAL TICKET EXPERIENCE</div>
+  <h1 class="brand">運命の座席発券</h1>
+  <div class="subtitle">発券ボタンの、その先に待つドキドキ。</div>
+</header>
+<div class="marquee"></div>
+<main>
+<section id="home" class="card">
+  <div class="theater"><div class="kanji">松竹座</div><small>OSAKA · THEATER TICKET</small></div>
+  <p class="notice">ここは大阪松竹座をイメージした、ファン向けの架空ゲームです。発券結果はランダム！ 実際の座席・公演・チケットとは関係ありません。</p>
+  <label for="performance">公演名を選んでね</label>
+  <select id="performance">
+    <option>One ANOTHER</option>
+    <option>epilogue</option>
+    <option>Boys be 8 Summer Live</option>
+    <option>Spring paradise</option>
+    <option>梅雨魂</option>
+  </select>
+  <label for="name">ニックネーム（任意）</label>
+  <input id="name" maxlength="16" placeholder="例：さくら">
+  <button id="start" class="primary">🎫　発券する</button>
+  <p class="notice center">座席番号が出るまで、まだ見ないで……！</p>
+</section>
+
+<section id="loading" class="card hidden center">
+  <div class="status">TICKET SYSTEM</div>
+  <div class="spinner" aria-hidden="true"></div>
+  <h2 class="loading-title processing" id="loadingTitle">発券処理中……</h2>
+  <p id="loadingMessage">座席情報を読み込んでいます。</p>
+  <div class="progress"><span id="bar"></span></div>
+  <p class="notice" id="loadingHint">どうか、いい席でありますように……！</p>
+</section>
+
+<section id="reveal" class="card hidden center">
+  <div class="status">SEAT INFORMATION READY</div>
+  <h2 class="loading-title">座席情報が確定しました。</h2>
+  <p>チケットをめくって、運命の座席を確認しよう。</p>
+  <div class="ticket" style="margin-top:18px;transform:rotate(-1deg)">
+    <div class="ticket-top">OSAKA · SPECIAL PERFORMANCE</div>
+    <div class="ticket-title">座席情報のお知らせ</div>
+    <div style="font-size:2.5rem;padding:20px 0;color:#956c80">？？？</div>
+    <div style="border-top:1px dashed #c8a7b5;padding-top:12px;font-size:.75rem">あなたの座席は……</div>
+  </div>
+  <button id="revealBtn" class="primary">座席番号を解禁する！</button>
+</section>
+
+<section id="result" class="card hidden">
+  <div class="center"><div class="status">発券完了 · TICKET ISSUED</div><h2 class="loading-title">座席が判明！！</h2><div id="rarity" class="badge">運命の1枚</div></div>
+  <div class="ticket" style="margin-top:18px">
+    <div class="ticket-top">OSAKA SHOCHIKUZA-INSPIRED · FICTIONAL</div>
+    <div class="ticket-title" id="resultPerformance">One ANOTHER</div>
+    <div class="ticket-grid">
+      <div class="ticket-cell"><span>階</span><strong id="floor">1階</strong></div>
+      <div class="ticket-cell"><span>席種イメージ</span><strong id="zone">前方席</strong></div>
+    </div>
+    <div class="seat-big"><div class="floor">座席番号</div><div class="row" id="seatNumber">8列 12番</div></div>
+    <div style="border-top:1px dashed #c8a7b5;margin-top:5px"></div>
+    <div class="ticket-note" id="seatMessage">舞台が近く感じられそう！</div>
+  </div>
+  <p id="greeting" class="notice center"></p>
+  <div class="actions">
+    <button id="share" class="primary">📲　友達に結果をシェア</button>
+    <button id="again" class="secondary">もう一度発券する</button>
+  </div>
+  <div class="history"><h3>今回の発券履歴</h3><div id="historyList"></div></div>
+</section>
+</main>
+<p class="foot">ファンによる非公式の架空ゲームです。大阪松竹座および関係各社とは無関係です。<br>実際の座席配置・列番号・座席番号を再現・保証するものではありません。</p>
+</div>
+<div id="toast" class="hidden" role="status" aria-live="polite"></div>
+<script>
+const $ = id => document.getElementById(id);
+const panels = ["home","loading","reveal","result"];
+let current = null, history = [], busy = false;
+const seatPool = [
+ {floor:"1階",row:2,seat:18,zone:"前方席",rarity:"前方席きた！",message:"舞台が近く感じられそう！思わず声が出ちゃうかも。"},
+ {floor:"1階",row:5,seat:7,zone:"前方席",rarity:"ドキドキの良席",message:"前方エリアのイメージ！目線の先に舞台が広がりそう。"},
+ {floor:"1階",row:9,seat:22,zone:"中ほど",rarity:"バランス良席",message:"舞台全体も楽しめそうな位置。演出をじっくり味わえそう！"},
+ {floor:"1階",row:13,seat:11,zone:"後方寄り",rarity:"1階席！",message:"1階席に決定！どんな景色が待っているかな？"},
+ {floor:"2階",row:1,seat:14,zone:"前方席",rarity:"2階前方！",message:"舞台全体を見渡せそうな位置。全景を楽しめるかも！"},
+ {floor:"2階",row:4,seat:20,zone:"後方寄り",rarity:"2階席！",message:"2階席に決定！舞台の雰囲気をまるごと楽しもう。"},
+ {floor:"3階",row:1,seat:8,zone:"前方席",rarity:"3階前方！",message:"上から舞台を見渡す気分！演出全体が見えそう。"},
+ {floor:"3階",row:3,seat:16,zone:"後方寄り",rarity:"3階席！",message:"3階席に決定！どんな景色か想像するのも楽しいね。"},
+ {floor:"1階",row:3,seat:5,zone:"前方席",rarity:"引きが強い！",message:"前方席イメージ！今日は運を使い切っちゃったかも？"},
+ {floor:"2階",row:2,seat:9,zone:"前方席",rarity:"いい予感！",message:"見渡しやすそうなエリア。舞台の隅々まで楽しもう！"},
+ {floor:"1階",row:15,seat:25,zone:"後方寄り",rarity:"発券成功！",message:"チケット確保！どの席でも舞台の時間は特別だね。"},
+ {floor:"3階",row:4,seat:12,zone:"後方寄り",rarity:"運命の座席",message:"ここからどんな景色が見えるかな？楽しみがふくらむ！"}
+];
+function show(id){panels.forEach(p=>$(p).classList.toggle("hidden",p!==id));}
+function randSeat(){return seatPool[Math.floor(Math.random()*seatPool.length)];}
+function wait(ms){return new Promise(r=>setTimeout(r,ms));}
+$("start").addEventListener("click", async()=>{
+ if(busy)return; busy=true;
+ current=randSeat(); current.performance=$("performance").value; current.name=$("name").value.trim();
+ $("loadingTitle").textContent="発券処理中……"; $("loadingMessage").textContent="座席情報を読み込んでいます。"; $("bar").style.width="0%"; show("loading");
+ const messages=[
+  ["発券処理中……","チケットを印刷しています。",22],
+  ["座席情報を確認中……","座席番号を照合しています。",49],
+  ["まもなく確定……","あと少し。深呼吸して待ってね……！",77],
+  ["座席情報が確定しました","チケットを受け取る準備ができました。",100]
+ ];
+ for(const m of messages){await wait(850);$("loadingTitle").textContent=m[0];$("loadingMessage").textContent=m[1];$("bar").style.width=m[2]+"%";}
+ await wait(350);show("reveal");busy=false;
+});
+$("revealBtn").addEventListener("click",()=>{
+ if(!current)return;
+ $("resultPerformance").textContent=current.performance;
+ $("floor").textContent=current.floor;
+ $("zone").textContent=current.zone;
+ $("seatNumber").textContent=`${current.row}列 ${current.seat}番`;
+ $("rarity").textContent=current.rarity;
+ $("seatMessage").textContent=current.message;
+ $("greeting").textContent=current.name?`${current.name}さんの運命の座席はこちら！`:"あなたの運命の座席はこちら！";
+ history.unshift({...current});history=history.slice(0,5);renderHistory();show("result");
+});
+function renderHistory(){
+ $("historyList").innerHTML="";
+ history.forEach((s,i)=>{const row=document.createElement("div");row.className="history-item";const left=document.createElement("span");left.textContent=`${i+1}. ${s.performance}`;const right=document.createElement("strong");right.textContent=`${s.floor} ${s.row}列 ${s.seat}番`;row.append(left,right);$("historyList").append(row);});
+}
+function shareText(){
+ const who=current.name?current.name+"の発券結果":"私の発券結果";
+ return `🎫【運命の座席発券】\\n${who}\\n公演：${current.performance}\\n座席：${current.floor} ${current.row}列 ${current.seat}番\\n「${current.rarity}」\\n\\n※大阪松竹座をイメージした架空ゲームの結果です。実際の座席とは関係ありません。`;
+}
+function toast(msg){$("toast").textContent=msg;$("toast").classList.remove("hidden");setTimeout(()=>$("toast").classList.add("hidden"),2600);}
+$("share").addEventListener("click",async()=>{
+ const text=shareText();
+ if(navigator.share){try{await navigator.share({title:"運命の座席発券",text});return;}catch(e){if(e.name==="AbortError")return;}}
+ try{await navigator.clipboard.writeText(text);toast("結果をコピーしたよ！LINEに貼り付けてね。");}
+ catch(e){const ta=document.createElement("textarea");ta.value=text;document.body.append(ta);ta.select();document.execCommand("copy");ta.remove();toast("結果をコピーしたよ！LINEに貼り付けてね。");}
+});
+$("again").addEventListener("click",()=>{current=null;show("home");});
+</script>
+</body>
+</html>
